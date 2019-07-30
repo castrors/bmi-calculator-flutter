@@ -1,10 +1,8 @@
+import 'package:bmi_calculator/constants.dart';
 import 'package:bmi_calculator/icon_content.dart';
 import 'package:bmi_calculator/reusable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-const activeCardColor = Color(0xFF1D1E33);
-const inactiveCardColor = Color(0xFF111328);
 
 class InputPage extends StatefulWidget {
   @override
@@ -12,25 +10,25 @@ class InputPage extends StatefulWidget {
 }
 
 class _InputPageState extends State<InputPage> {
+  Color maleColor = kInactiveCardColor;
+  Color femaleColor = kInactiveCardColor;
+  int height = 160;
 
-  Color maleColor = inactiveCardColor;
-  Color femaleColor = inactiveCardColor;
-
-  void updateColor(int gender){
-    if(gender == 1){
-      if(maleColor == inactiveCardColor){
-        maleColor = activeCardColor;
-        femaleColor = inactiveCardColor;
-      } else{
-        maleColor = inactiveCardColor;
+  void updateColor(int gender) {
+    if (gender == 1) {
+      if (maleColor == kInactiveCardColor) {
+        maleColor = kActiveCardColor;
+        femaleColor = kInactiveCardColor;
+      } else {
+        maleColor = kInactiveCardColor;
       }
     }
-    if(gender == 2){
-      if(femaleColor == inactiveCardColor){
-        femaleColor = activeCardColor;
-        maleColor = inactiveCardColor;
-      } else{
-        femaleColor = inactiveCardColor;
+    if (gender == 2) {
+      if (femaleColor == kInactiveCardColor) {
+        femaleColor = kActiveCardColor;
+        maleColor = kInactiveCardColor;
+      } else {
+        femaleColor = kInactiveCardColor;
       }
     }
   }
@@ -42,14 +40,15 @@ class _InputPageState extends State<InputPage> {
           title: Text('BMI CALCULATOR'),
         ),
         body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Expanded(
               child: Row(children: <Widget>[
                 Expanded(
                   child: GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       setState(() {
-                        updateColor(1);  
+                        updateColor(1);
                       });
                     },
                     child: ReusableWidget(
@@ -63,12 +62,12 @@ class _InputPageState extends State<InputPage> {
                 ),
                 Expanded(
                   child: GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       setState(() {
-                        updateColor(2);  
+                        updateColor(2);
                       });
                     },
-                                      child: ReusableWidget(
+                    child: ReusableWidget(
                       color: femaleColor,
                       cardChild: IconContent(
                         icon: FontAwesomeIcons.venus,
@@ -80,7 +79,45 @@ class _InputPageState extends State<InputPage> {
               ]),
             ),
             Expanded(
-              child: ReusableWidget(color: Color(0xFF1D1E33)),
+              child: ReusableWidget(
+                color: Color(0xFF1D1E33),
+                cardChild: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      'HEIGHT',
+                      style: kLabelTextStyle,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
+                      children: <Widget>[
+                        Text(
+                          height.toString(),
+                          style: kNumberTextStyle,
+                        ),
+                        Text(
+                          'cm',
+                          style: kLabelTextStyle,
+                        )
+                      ],
+                    ),
+                    Slider(
+                      value: height.toDouble(),
+                      min: 120.0,
+                      max: 220.0,
+                      activeColor: kBottomContainerColor,
+                      inactiveColor: kSliderInactiveColor,
+                      onChanged: (double newValue){
+                        setState(() {
+                          height = newValue.round();
+                        });
+                      },
+                    )
+                  ],
+                ),
+              ),
             ),
             Expanded(
               child: Row(
